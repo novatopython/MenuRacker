@@ -1,4 +1,1 @@
-# MenuRacker
-import os
-import time
-print("oi")
+Esta ferramenta foi criada por 2 amigos, está escrita 100% em Python, e Uma ferramenta de busca,ela busca IP,Gmail e nome de usuário,espero que goste
