@@ -1,0 +1,42 @@
+import requests
+import urllib3
+from requests.exceptions import RequestException, SSLError
+from json.decoder import JSONDecodeError
+
+# Configurações
+API_URL = "https://api.encrypt.wtf/rev/api.php"
+PARAMS = {
+    "token": "ifindy",
+    "base": "consulta_telefone",
+    "query": "8594494409"
+}
+
+# Desativa avisos SSL temporariamente
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+def consultar_telefone():
+    try:
+        print("Consultando telefone...")
+        response = requests.get(API_URL, params=PARAMS, verify=False, timeout=10)
+        response.raise_for_status()
+
+        try:
+            dados = response.json()
+            if "error" in dados:
+                print(f"Erro na API: {dados['error']}")
+                if "detalhe" in dados:
+                    print(f"Detalhes: {dados['detalhe']}")
+            else:
+                print("Dados encontrados:")
+                for chave, valor in dados.items():
+                    print(f"{chave}: {valor}")
+        except JSONDecodeError:
+            print(f"Resposta inválida (não é JSON): {response.text}")
+
+    except SSLError as e:
+        print(f"Erro de SSL (certificado inválido):\n{e}\nSolução: Atualize o certificado ou use uma API confiável.")
+    except RequestException as e:
+        print(f"Falha na requisição:\n{e}")
+
+if __name__ == "__main__":
+    consultar_telefone()
